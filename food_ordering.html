@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foodie Express - Online Food Ordering</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#fff8f2;color:#333}
+header{background:linear-gradient(135deg,#e85d04,#f48c06);color:white;text-align:center;padding:28px 15px}
+header h1{font-size:34px;margin-bottom:8px}
+nav{background:#222;text-align:center;padding:12px;position:sticky;top:0;z-index:10}
+nav a{display:inline-block;color:white;text-decoration:none;padding:10px 22px;margin:3px;border-radius:6px}
+nav a:hover{background:#e85d04}
+.container{width:92%;max-width:1150px;margin:25px auto}
+.section{background:white;padding:24px;margin-bottom:22px;border-radius:12px;box-shadow:0 3px 12px #ddd}
+h2{color:#d94801;margin-bottom:16px}
+select,input,textarea{padding:10px;border:1px solid #bbb;border-radius:6px}
+select{width:260px}
+.tabs{margin-top:20px}.tab-button{border:0;padding:11px 18px;cursor:pointer;border-radius:6px;margin:3px;background:#eee}
+.tab-button:hover,.tab-button.active{background:#e85d04;color:white}
+.tab-content{display:none;padding:16px;background:#fff7ef;border-radius:8px;margin-top:8px}
+.tab-content.active{display:block}
+.food-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.food-card{border:1px solid #ddd;border-radius:12px;overflow:hidden;text-align:center;transition:.3s;background:white}
+.food-card:hover{transform:translateY(-6px);box-shadow:0 7px 18px #ccc}
+.food-card img{width:100%;height:155px;object-fit:cover}
+.food-card .info{padding:15px}
+.food-card h3{color:#d94801;margin-bottom:7px}
+.price{font-weight:bold;font-size:18px;margin:8px}
+.order-btn,.submit-btn{background:#e85d04;color:white;border:0;padding:10px 16px;border-radius:6px;cursor:pointer}
+.order-btn:hover{background:#9d2f00}.submit-btn:hover{background:#1b7d3a}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.full{grid-column:1/-1}label{font-weight:bold;display:block;margin-bottom:5px}
+input,textarea{width:100%}textarea{height:85px;resize:vertical}
+table{width:100%;border-collapse:collapse;margin-top:12px}
+th,td{border:1px solid #ccc;padding:12px;text-align:center}
+th{background:#e85d04;color:white}tr:hover{background:#fff0e3}
+.accordion{width:100%;text-align:left;padding:15px;border:0;background:#eee;margin-top:6px;border-radius:6px;cursor:pointer;font-size:15px}
+.accordion:hover{background:#ddd}.panel{display:none;padding:15px;background:#fffaf5;border:1px solid #ddd}
+footer{background:#222;color:white;text-align:center;padding:20px}
+.success{color:#198754;font-weight:bold;margin-top:10px}
+@media(max-width:700px){.form-grid{grid-template-columns:1fr}.full{grid-column:auto}}
+</style>
+</head>
+<body>
+<header id="home">
+<h1>🍴 Foodie Express</h1>
+<p>Fresh Food • Easy Ordering • Fast Delivery</p>
+</header>
+
+<nav>
+<a href="#home">Home</a><a href="#menu">Menu</a><a href="#offers">Offers</a><a href="#contact">Contact</a>
+</nav>
+
+<div class="container">
+<section class="section" id="menu">
+<h2>🍽️ Explore Our Menu</h2>
+<label for="category">Food Category:</label>
+<select id="category">
+<option>All Categories</option><option>Pizza</option><option>Burgers</option><option>Biryani</option><option>Desserts</option>
+</select>
+
+<div class="tabs">
+<button class="tab-button active" onclick="openTab('veg',this)">Vegetarian</button>
+<button class="tab-button" onclick="openTab('nonveg',this)">Non-Vegetarian</button>
+<button class="tab-button" onclick="openTab('dessert',this)">Desserts</button>
+<div id="veg" class="tab-content active"><b>Vegetarian:</b> Margherita Pizza, Veg Burger and Paneer dishes.</div>
+<div id="nonveg" class="tab-content"><b>Non-Vegetarian:</b> Chicken Burger and Chicken Biryani.</div>
+<div id="dessert" class="tab-content"><b>Desserts:</b> Chocolate Cake and Ice Cream.</div>
+</div>
+</section>
+
+<section class="section">
+<h2>🛒 Select Your Food</h2>
+<div class="food-grid">
+<div class="food-card">
+<img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=700&q=80" alt="Pizza">
+<div class="info"><h3>Margherita Pizza</h3><p>Classic cheesy pizza</p><p class="price">₹250</p>
+<label><input type="checkbox" class="food" value="Margherita Pizza" data-price="250"> Add Pizza</label><br><br>
+<button class="order-btn" onclick="quickAdd('Margherita Pizza')">Add to Order</button></div>
+</div>
+
+<div class="food-card">
+<img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=80" alt="Burger">
+<div class="info"><h3>Chicken Burger</h3><p>Juicy chicken burger</p><p class="price">₹180</p>
+<label><input type="checkbox" class="food" value="Chicken Burger" data-price="180"> Add Burger</label><br><br>
+<button class="order-btn" onclick="quickAdd('Chicken Burger')">Add to Order</button></div>
+</div>
+
+<div class="food-card">
+<img src="https://images.unsplash.com/photo-1563379091339-03246963d96c?auto=format&fit=crop&w=700&q=80" alt="Biryani">
+<div class="info"><h3>Chicken Biryani</h3><p>Flavorful spicy biryani</p><p class="price">₹220</p>
+<label><input type="checkbox" class="food" value="Chicken Biryani" data-price="220"> Add Biryani</label><br><br>
+<button class="order-btn" onclick="quickAdd('Chicken Biryani')">Add to Order</button></div>
+</div>
+
+<div class="food-card">
+<img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=700&q=80" alt="Chocolate Cake">
+<div class="info"><h3>Chocolate Cake</h3><p>Soft chocolate dessert</p><p class="price">₹150</p>
+<label><input type="checkbox" class="food" value="Chocolate Cake" data-price="150"> Add Cake</label><br><br>
+<button class="order-btn" onclick="quickAdd('Chocolate Cake')">Add to Order</button></div>
+</div>
+</div>
+
+<h3 style="margin-top:22px">Choose Size</h3>
+<label><input type="radio" name="size" checked> Small</label>
+<label><input type="radio" name="size"> Medium</label>
+<label><input type="radio" name="size"> Large</label>
+</section>
+
+<section class="section" id="offers">
+<h2>🎉 Special Offers</h2>
+<p>20% OFF on orders above ₹500!</p><br>
+<p>Free delivery on weekend orders.</p>
+</section>
+
+<section class="section" id="contact">
+<h2>📦 Customer Order Details</h2>
+<form onsubmit="placeOrder(event)">
+<div class="form-grid">
+<div><label>Customer Name</label><input type="text" placeholder="Enter your name" required></div>
+<div><label>Phone Number</label><input type="tel" placeholder="Enter phone number" required></div>
+<div class="full"><label>Delivery Address</label><textarea placeholder="Enter complete delivery address" required></textarea></div>
+<div class="full"><label>Special Instructions</label><textarea placeholder="Example: Less spicy, no onions"></textarea></div>
+<div class="full"><button class="submit-btn" type="submit">Place Order</button></div>
+</div>
+<p id="message" class="success"></p>
+</form>
+</section>
+
+<section class="section">
+<h2>🧾 Order Summary</h2>
+<table>
+<thead><tr><th>Food Item</th><th>Quantity</th><th>Price</th></tr></thead>
+<tbody id="orderBody"><tr><td colspan="3">No items selected</td></tr></tbody>
+<tfoot><tr><th colspan="2">Total</th><th id="total">₹0</th></tr></tfoot>
+</table>
+</section>
+
+<section class="section">
+<h2>ℹ️ Food Details</h2>
+<button class="accordion">🍕 Margherita Pizza - Description & Ingredients</button>
+<div class="panel">Classic Italian pizza. <b>Ingredients:</b> Pizza base, tomato, cheese and herbs.</div>
+<button class="accordion">🍗 Chicken Biryani - Description & Ingredients</button>
+<div class="panel">A flavorful rice dish. <b>Ingredients:</b> Chicken, rice, onion, spices and herbs.</div>
+<button class="accordion">🍫 Chocolate Cake - Description & Ingredients</button>
+<div class="panel">Soft chocolate dessert. <b>Ingredients:</b> Flour, cocoa, sugar, milk and chocolate.</div>
+</section>
+</div>
+
+<footer id="contact"><p>© 2026 Foodie Express | Online Food Ordering Interface</p></footer>
+
+<script>
+function openTab(id,btn){
+document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
+document.querySelectorAll('.tab-button').forEach(x=>x.classList.remove('active'));
+document.getElementById(id).classList.add('active');btn.classList.add('active');
+}
+function quickAdd(name){
+document.querySelectorAll('.food').forEach(x=>{if(x.value===name)x.checked=true});
+updateOrder();
+}
+function updateOrder(){
+let selected=document.querySelectorAll('.food:checked'), body=document.getElementById('orderBody'), total=0;
+body.innerHTML='';
+if(!selected.length){body.innerHTML='<tr><td colspan="3">No items selected</td></tr>'}
+selected.forEach(x=>{let p=Number(x.dataset.price);total+=p;body.innerHTML+=`<tr><td>${x.value}</td><td>1</td><td>₹${p}</td></tr>`});
+document.getElementById('total').textContent='₹'+total;
+}
+document.querySelectorAll('.food').forEach(x=>x.addEventListener('change',updateOrder));
+document.querySelectorAll('.accordion').forEach(x=>x.addEventListener('click',function(){
+let p=this.nextElementSibling;p.style.display=p.style.display==='block'?'none':'block';
+}));
+function placeOrder(e){e.preventDefault();document.getElementById('message').textContent='✓ Order placed successfully! Thank you for ordering.';}
+</script>
+</body>
+</html>
